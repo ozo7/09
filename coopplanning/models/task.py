@@ -82,7 +82,7 @@ class TaskTemplate(models.Model):
         for rec in self:
             rec.duration = rec.end_time - rec.start_time
 
-    @api.multi
+    # @api.multi
     def generate_task(self):
         self.ensure_one()
         task = self.env['coopplanning.task']

@@ -14,14 +14,14 @@ class Rentals(models.Model):
     return_date = fields.Date(required=True)
     state = fields.Selection([('draft', 'Draft'), ('rented', 'Rented'), ('returned', 'Returned'), ('lost', 'Lost')], default="draft")
 
-    @api.multi
+    # @api.multi
     def action_confirm(self):
         for rec in self:
             rec.state = 'rented'
             rec.copy_id.book_state = 'rented'
             rec.add_fee('time')
 
-    @api.multi
+    # @api.multi
     def add_fee(self, type):
         for rec in self:
             if type == 'time':
@@ -40,13 +40,13 @@ class Rentals(models.Model):
                 'amount':      - amount,
             })
 
-    @api.multi
+    # @api.multi
     def action_return(self):
         for rec in self:
             rec.state = 'returned'
             rec.copy_id.book_state = 'available'
 
-    @api.multi
+    # @api.multi
     def action_lost(self):
         for rec in self:
             rec.state = 'lost'

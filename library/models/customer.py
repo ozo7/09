@@ -7,6 +7,8 @@ class Partner(models.Model):
 
     author = fields.Boolean('is an Author', default=False)
     publisher = fields.Boolean('is a Publisher', default=False)
+    # Olaf: I added the below field to prevent the errors of this missing field!
+    customer = fields.Boolean('is a Customer', default=False)
 
     current_rental_ids = fields.One2many('library.rental', 'customer_id', string='Current Rentals', domain=[('state', '=', 'rented')])
     old_rental_ids = fields.One2many('library.rental', 'customer_id', string='Old Rentals', domain=[('state', '=', 'returned')])
@@ -21,12 +23,12 @@ class Partner(models.Model):
     payment_ids = fields.One2many('library.payment', 'customer_id', string='Payments')
     amount_owed = fields.Float('Amount owed', compute="_amount_owed", store=True)
 
-    @api.multi
+    # @api.multi
     def _get_lost_books_qty(self):
         for rec in self:
             rec.qty_lost_book = len(rec.lost_rental_ids)
 
-    @api.multi
+    # @api.multi
     @api.depends('payment_ids.amount')
     def _amount_owed(self):
         for rec in self:

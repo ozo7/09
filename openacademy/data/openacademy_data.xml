@@ -15,7 +15,7 @@
     <record id="partner_daenerys" model="res.partner">
         <field name="name">Daenerys Targaryan</field>
         <field name="company_id" ref="base.main_company"/>
-        <field name="customer" eval="False"/>
+        <!-- <field name="customer" eval="False"/> -->
         <field name="instructor" eval="True"/>
         <field name="category_id" eval="[(4,ref('teacher3'),0)]"/>
     </record>
@@ -40,7 +40,7 @@
     <record id="partner_ned" model="res.partner">
         <field name="name">Ned Stark</field>
         <field name="company_id" ref="base.main_company"/>
-        <field name="customer" eval="False"/>
+        <!-- <field name="customer" eval="False"/> -->
         <field name="instructor" eval="True"/>
         <field name="category_id" eval="[(4,ref('teacher1'),0)]"/>
     </record>
@@ -63,14 +63,14 @@
         <field name="name">Dragon Technical Training</field>
         <field name="description">You will learn how to train your dragon theorically</field>
         <field name="responsible_id" ref="user_daenerys"/>
-        <field name="level">1</field>
+        <field name="level">easy</field>
     </record>
 
     <record id="course_dragon_functionnal" model="openacademy.course">
         <field name="name">Dragon Functionnal Training</field>
         <field name="description">You will learn how to train your dragon practically</field>
         <field name="responsible_id" ref="user_ned"/>
-        <field name="level">3</field>
+        <field name="level">hard</field>
     </record>
 
     <record id="session_dragon_technical" model="openacademy.session">

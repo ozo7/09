@@ -19,11 +19,21 @@
         </field>
     </record>
 
-    <act_window id="add_attendees_action"
+    <record id="add_attendees_action" model="ir.actions.act_window">
+        <field name="name">Add Attendees</field>
+        <!-- <field name="src_model">res.partner</field> -->
+        <field name="res_model">add_attendee.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <!-- <field name="key2">client_action_multi</field> -->
+    </record>
+
+    <!-- Olaf: this part was causing the error additional element: record, xml schema not valid, and I tried to replace it by the record above. -->
+    <!-- <act_window id="add_attendees_action"
                 name="Add Attendees"
                 src_model="res.partner"
                 res_model="add_attendee.wizard"
                 view_mode="form"
                 target="new"
-                key2="client_action_multi"/>
+                key2="client_action_multi"/> -->
 </odoo>

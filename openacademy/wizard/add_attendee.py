@@ -21,7 +21,7 @@ class AddAttendees(models.TransientModel):
         res = super(AddAttendees, self).create(vals)
         return res
 
-    @api.multi
+    # @api.multi
     def subscribe(self):
         for session in self.session_id:
             session.attendee_ids |= self.attendee_ids
