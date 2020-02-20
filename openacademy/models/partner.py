@@ -29,17 +29,32 @@ class Partner(models.Model):
     
     def clicking(self):        
         # get 4 random partner and flag them as instructor
-        p = self.env['res.partner']
-        pp = p.search([])
-        ppIDs = pp.ids # used to prevent double results in random
-        ppSet = set()
-        for i in range(1,4):
-            r = randint(1,len(ppIDs))
-            ppSet.add(ppIDs[r])
-            del ppIDs[r]
-        for s in ppSet:
-            pp.browse(s).instructor = True
+        print("hello")
+        # p = self.env['res.partner']
+        # pp = p.search([])
+        # ppIDs = pp.ids # used to prevent double results in random
+        # ppSet = set()
+        # for i in range(1,4):
+        #     r = randint(1,len(ppIDs))
+        #     ppSet.add(ppIDs[r])
+        #     del ppIDs[r]
+        # for s in ppSet:
+        #     pp.browse(s).instructor = True
         
+class Helper(models.Model):
+    _name = 'helper'
 
-
-
+    # Olaf: We need this urgently to make the method accessible from the xml, for example
+    @api.model
+    def clicking(self):        
+            # get 4 random partner and flag them as instructor
+            p = self.env['res.partner']
+            pp = p.search([])
+            ppIDs = pp.ids # used to prevent double results in random
+            ppSet = set()
+            for i in range(1,4):
+                r = randint(1,len(ppIDs))
+                ppSet.add(ppIDs[r])
+                del ppIDs[r]
+            for s in ppSet:
+                pp.browse(s).instructor = True

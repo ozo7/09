@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <function name="write" model="res.partner">
+        <function name="search" model="res.partner">
+            <value eval="[('instructor', '=', True)]" />
+        </function>
+        <value eval="{'instructor': False}"/>
+    </function>    
+</odoo>
