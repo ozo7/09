@@ -59,10 +59,14 @@
                             <field name="course_id"/>
                             <field name="responsible_id"/>
                             <field name="level"/>
+                            <!-- Olaf: The operators in the domain are html-encoded &gt; ... -->
                             <field name="instructor_id"
+                                   domain="[('instructor', '=', True)]"
+                            />
+                        <!-- <field name="instructor_id"
                                    domain="['&amp;', ('instructor', '=', True), ('level', '&gt;=', level)]"
                             />
-                            <field name="active"/>
+                            <field name="active"/> -->
                         </group>
                         <group>
                             <field name="start_date"/>
@@ -74,6 +78,7 @@
                             <field name="taken_seats" widget="progressbar"/>
                         </group>
                     </group>
+                    <!-- Olaf: Where are the columns defined? -->
                     <label for="attendee_ids" groups="openacademy.group_maesters"/>
                     <field name="attendee_ids" groups="openacademy.group_maesters"/>
                 </sheet>

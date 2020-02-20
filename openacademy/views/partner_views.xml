@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+
+<!-- **** VIEW TREE -->
     <record id="partner_view_tree" model="ir.ui.view">
         <field name="name">openacademy.partner.tree</field>
         <field name="model">res.partner</field>
@@ -7,6 +9,7 @@
         <field name="arch" type="xml">
             <tree string="Contacts">
                 <field name="display_name" string="Name"/>
+                <field name="instructor"/>
                 <field name="function" invisible="1"/>
                 <field name="phone"/>
                 <field name="email"/>
@@ -19,14 +22,19 @@
         </field>
     </record>
 
+<!-- **** VIEW FORM -->
     <record id="partner_view_form" model="ir.ui.view">
         <field name="name">openacadmey.partner.form</field>
         <field name="model">res.partner</field>
+        <!-- The form inherits from another! -->
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
+            <!-- Olaf: So the Academy content is just in the tab Sessions, it seems that I cannot put a session field outside of the tab (notebook) -->
             <notebook position="inside">
                 <page string="Sessions">
                     <group>
+                        <button type="object" class="oe_stat_button" string="testing" name="clicking"/>
+                        <field name="zzinfo" string="INFO ==&gt; " style="color:red;"/>
                         <field name="instructor"/>
                         <field name="level"/>
                         <field name="session_ids"/>
@@ -36,6 +44,8 @@
         </field>
     </record>
 
+<!-- This search view is not referenced and is specifying the search on the top left -->
+<!-- **** SEARCH -->
     <record id="partner_view_search" model="ir.ui.view">
         <field name="name">openacademy.partner.search</field>
         <field name="model">res.partner</field>
@@ -47,6 +57,8 @@
         </field>
     </record>
 
+<!-- These two below hold the id from the menu -->
+<!-- **** ACTION WINDOW -->
     <record id="partner_action" model="ir.actions.act_window">
         <field name="name">Contacts</field>
         <field name="res_model">res.partner</field>
@@ -59,6 +71,8 @@
         <field name="view_mode">tree,form</field>
     </record>
 
+<!-- These two below reference the one id above about partner_action which relates to the menu "Contacts" -->
+<!-- **** ACTION WINDOW VIEW -->
     <record id="partner_action_view_tree" model="ir.actions.act_window.view">
         <field name="view_mode">tree</field>
         <field name="sequence" eval="10"/>

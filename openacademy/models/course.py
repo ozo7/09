@@ -17,7 +17,7 @@ class Course(models.Model):
 
     session_ids = fields.One2many('openacademy.session', 'course_id', string="Sessions")
 
-    level = fields.Selection([('easy', 'Easy'), ('medium', 'Medium'), ('hard', 'Hard')], string="Difficulty Level")
+    level = fields.Selection([('1', 'Easy'), ('2', 'Medium'), ('3', 'Hard')], string="Difficulty Level")
     session_count = fields.Integer(compute="_compute_session_count")
     attendee_count = fields.Integer(compute="_compute_attendee_count")
 
@@ -83,6 +83,8 @@ class Session(models.Model):
     _order = 'name'
     _description = 'Session'
 
+    # Olaf: changing the end date does not trigger any correction in start date or duration! => was corrected
+
     name = fields.Char(required=True)
     description = fields.Html()
     active = fields.Boolean(default=True)
@@ -91,10 +93,13 @@ class Session(models.Model):
     responsible_id = fields.Many2one(related='course_id.responsible_id', readonly=True, store=True)
 
     start_date = fields.Date(default=fields.Date.context_today)
-    end_date = fields.Date(string='End date', store=True, compute='_get_end_date', inverse='_set_end_date')
-    duration = fields.Float(digits=(6, 2), help="Duration in days", default=1)
+    # Olaf: is calculated, has inverse calculation
+    end_date = fields.Date(string='End date', default=fields.Date.context_today, store=True, compute='_get_end_date', inverse='_set_end_date', )
+    # Olaf: was not calculated, but editable and was corrected by inverse calculation of end_date. Now putting it to calculate and have a function prevents it from being editable! Now adding an inverse function makes it editable again and corrects it!
+    duration = fields.Float(digits=(6, 2), help="Duration in days", default=1, compute='_calc_duration', inverse='_get_end_date')
 
     instructor_id = fields.Many2one('res.partner', string="Instructor")
+    # Olaf: Here the ondelete attribute will fulfill the "clean system" requirement from the exercise.
     course_id = fields.Many2one('openacademy.course', ondelete='cascade', string="Course", required=True)
     attendee_ids = fields.Many2many('res.partner', string="Attendees", domain="[('is_company', '=', True)]")
     attendees_count = fields.Integer(compute='_get_attendees_count', store=True)
@@ -138,6 +143,8 @@ class Session(models.Model):
                 raise exceptions.ValidationError("A session's instructor can't be an attendee")
 
     @api.depends('start_date', 'duration')
+    # Olaf: function configured in end_date field to be computed
+    # Olaf: is triggered by losing onFocus
     def _get_end_date(self):
         for session in self:
             if not (session.start_date and session.duration):
@@ -150,6 +157,19 @@ class Session(models.Model):
                 session.end_date = str(start + duration)
 
     def _set_end_date(self):
+    # Olaf: function configured in end_date field to be inverse computed.
+    # Olaf: But what does it do? The duration is not the result of any manual change online of neither start nor end date! !! => Danger! The function is triggered by 'Save' and then the result is different from what the user saw!
+        for session in self:
+            if session.start_date and session.end_date:
+                # Compute the difference between dates, but: Friday - Monday = 4
+                # days, so add one day to get 5 days instead
+                start_date = fields.Datetime.from_string(session.start_date)
+                end_date = fields.Datetime.from_string(session.end_date)
+                session.duration = (end_date - start_date).days + 1
+    
+    @api.depends('start_date', 'end_date')
+    def _calc_duration(self):
+    # Olaf: Alternative to above function to make it work in the front end already. It is configured without making duration computed => does not have effect!
         for session in self:
             if session.start_date and session.end_date:
                 # Compute the difference between dates, but: Friday - Monday = 4
