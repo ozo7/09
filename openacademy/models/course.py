@@ -220,19 +220,20 @@ class Session(models.Model):
 
     # @api.multi
     def create_invoice_teacher(self):
-        teacher_invoice = self.env['account.invoice'].search([
+        teacher_invoice = self.env['account.move'].search([
             ('partner_id', '=', self.instructor_id.id)
         ], limit=1)
 
         if not teacher_invoice:
-            teacher_invoice = self.env['account.invoice'].create({
+            teacher_invoice = self.env['account.move'].create({
                 'partner_id': self.instructor_id.id,
             })
 
         # install module accounting and a chart of account to have at least one expense account in your CoA
+        ### Olaf: You will find the 'invoices' as journal entries in the Accounting App: Menu: Accounting > Journal Entries
         expense_account = self.env['account.account'].search([('user_type_id', '=', self.env.ref('account.data_account_type_expenses').id)], limit=1)
-        self.env['account.invoice.line'].create({
-            'invoice_id': teacher_invoice.id,
+        self.env['account.move.line'].create({
+            'move_id': teacher_invoice.id,
             'product_id': self.product_id.id,
             'price_unit': self.product_id.lst_price,
             'account_id': expense_account.id,

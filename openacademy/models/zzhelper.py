@@ -10,6 +10,15 @@ class zzHelper(models.TransientModel):
 
     zzinfo = fields.Char(string="Info", default=">>> ...")
 
+    def button_clearInstructors(self):
+        p = self.env['res.partner']
+        pp = p.search([])
+        for ppp in pp:
+            if ppp.instructor:
+               ppp.instructor = False
+        self.zzinfo = "cleared"
+        return True
+
     # Olaf: we cannot call a function decorated by @api.model from a button, so we need to have this workaround instead:
     def button_flag4randomInstructors(self):
         self.flag4randomInstructors()
@@ -27,7 +36,7 @@ class zzHelper(models.TransientModel):
             ppIDs = pp.ids # used to prevent double results in random
             ppSet = set()
             for i in range(4):
-                r = randint(1,len(ppIDs))
+                r = randint(0,len(ppIDs)-1)
                 ppSet.add(ppIDs[r])
                 del ppIDs[r]
             for s in ppSet:

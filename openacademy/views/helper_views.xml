@@ -6,13 +6,14 @@
         <field name="name">openacadmey.helper.form</field>
         <field name="model">oa9.zzhelper</field>        
         <field name="arch" type="xml">
-        <form>
+        <form edit="false" create="false" delete="false">
             <sheet>
 
                 <group>
-                    <button type="object" class="oe_stat_button" string="testing" name="button_flag4randomInstructors"/>
-                    <field name="zzinfo" string="INFO ==&gt; " style="color:blue;"/>
+                    <button type="object" class="oe_stat_button" string="clear instructors" name="button_clearInstructors"/>
+                    <button type="object" class="oe_stat_button" string="flag 4 instructors" name="button_flag4randomInstructors"/>
                 </group>
+                 <field name="zzinfo" string="INFO ==&gt; " style="color:blue;"/>
         
             </sheet>
         </form>    

@@ -42,7 +42,7 @@ Once the invoice line has been created, mark the session as paid (see field
 `is_paid`.) The button should not be visible when the session is paid.
 
 
-## Problem 3: Planing Management
+## Problem 3: Planning Management
 
 Change the way a task type is shown in relation fields, i.e., its label or
 "display name". The label should combine the task type name and its description.

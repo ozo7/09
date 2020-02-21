@@ -59,7 +59,7 @@
     />
     <menuitem
             id="helper_menu_action"
-            name="Reset instructor flag (no instructors)"
+            name="helper form"
             parent="openacademy.helper_menu"
             sequence="10"
             action="helper_action"
