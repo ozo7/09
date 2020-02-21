@@ -6,4 +6,4 @@ session_read_all,Session All,model_oa9_session,group_apprentices,1,0,0,0
 course_read_public,Course All,model_oa9_course,,1,0,0,0
 session_read_public,Session All,model_oa9_session,,1,0,0,0
 partner_read_public,Course All,model_res_partner,,1,0,0,0
-access_zzhelper,access_zzhelper,model_oa9_zzhelper,base.group_user,1,0,0,0
+

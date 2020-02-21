@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+<!-- **** VIEW FORM -->
+    <record id="helper_view_form" model="ir.ui.view">
+        <field name="name">openacadmey.helper.form</field>
+        <field name="model">oa9.zzhelper</field>        
+        <field name="arch" type="xml">
+        <form>
+            <sheet>
+
+                <group>
+                    <button type="object" class="oe_stat_button" string="testing" name="button_flag4randomInstructors"/>
+                    <field name="zzinfo" string="INFO ==&gt; " style="color:blue;"/>
+                </group>
+        
+            </sheet>
+        </form>    
+        </field>
+    </record>
+
+<!-- This holds the id from the menu -->
+<!-- **** ACTION WINDOW -->
+    <record id="helper_action" model="ir.actions.act_window">
+        <field name="name">Helper</field>
+        <field name="res_model">oa9.zzhelper</field>
+        <field name="view_mode">form</field>
+    </record>
+
+</odoo>

@@ -50,4 +50,18 @@
             sequence="20"
             action="partner_category_action"
     />
+    
+    <menuitem
+            id="helper_menu"
+            name="Helper"
+            parent="openacademy.root_menu"
+            sequence="101"
+    />
+    <menuitem
+            id="helper_menu_action"
+            name="Reset instructor flag (no instructors)"
+            parent="openacademy.helper_menu"
+            sequence="10"
+            action="helper_action"
+    />
 </odoo>
