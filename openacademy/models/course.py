@@ -5,7 +5,7 @@ from odoo import api, exceptions, fields, models
 
 
 class Course(models.Model):
-    _name = 'openacademy.course'
+    _name = 'oa9.course'
     _description = 'Course'
     _inherit = 'mail.thread'
 
@@ -15,7 +15,7 @@ class Course(models.Model):
     responsible_id = fields.Many2one('res.users', ondelete='set null', string="Responsible")
     can_edit_responsible = fields.Boolean(compute='_compute_can_edit_responsible')
 
-    session_ids = fields.One2many('openacademy.session', 'course_id', string="Sessions")
+    session_ids = fields.One2many('oa9.session', 'course_id', string="Sessions")
 
     level = fields.Selection([('1', 'Easy'), ('2', 'Medium'), ('3', 'Hard')], string="Difficulty Level")
     session_count = fields.Integer(compute="_compute_session_count")
@@ -37,7 +37,7 @@ class Course(models.Model):
 
     @api.depends('responsible_id')
     def _compute_can_edit_responsible(self):
-        self.can_edit_responsible = self.env.user.has_group('openacademy.group_archmaesters')
+        self.can_edit_responsible = self.env.user.has_group('oa9.group_archmaesters')
 
     # @api.multi
     def copy(self, default=None):
@@ -78,7 +78,7 @@ class Course(models.Model):
 
 
 class Session(models.Model):
-    _name = 'openacademy.session'
+    _name = 'oa9.session'
     _inherit = ['mail.thread']
     _order = 'name'
     _description = 'Session'
@@ -100,7 +100,7 @@ class Session(models.Model):
 
     instructor_id = fields.Many2one('res.partner', string="Instructor")
     # Olaf: Here the ondelete attribute will fulfill the "clean system" requirement from the exercise.
-    course_id = fields.Many2one('openacademy.course', ondelete='cascade', string="Course", required=True)
+    course_id = fields.Many2one('oa9.course', ondelete='cascade', string="Course", required=True)
     attendee_ids = fields.Many2many('res.partner', string="Attendees", domain="[('is_company', '=', True)]")
     attendees_count = fields.Integer(compute='_get_attendees_count', store=True)
     seats = fields.Integer()

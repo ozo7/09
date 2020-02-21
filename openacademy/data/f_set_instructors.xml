@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-
-
-
+<!-- Example to trigger a method on a model from an xml file -->
       <data noupdate="0">
-          <function model="helper" name="clicking"/>
-          
+          <function model="oa9.zzhelper" name="_flag4randomInstructors"/>          
       </data>
-
-
-    
 </odoo>

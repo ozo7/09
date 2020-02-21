@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="add_attendees_view_wizard" model="ir.ui.view">
-        <field name="name">openacademy.add_attendees.form</field>
+        <field name="name">oa9.add_attendees.form</field>
         <field name="model">add_attendee.wizard</field>
         <field name="arch" type="xml">
             <form string="Add Attendees">

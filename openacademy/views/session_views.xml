@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <record id="session_view_list" model="ir.ui.view">
-        <field name="name">openacademy.session.list</field>
-        <field name="model">openacademy.session</field>
+        <field name="name">oa9.session.list</field>
+        <field name="model">oa9.session</field>
         <field name="arch" type="xml">
             <tree decoration-bf="(taken_seats &gt; 70)"
                   decoration-warning="duration &lt; 5"
@@ -21,8 +21,8 @@
     </record>
 
     <record id="session_view_form" model="ir.ui.view">
-        <field name="name">openacademy.session.form</field>
-        <field name="model">openacademy.session</field>
+        <field name="name">oa9.session.form</field>
+        <field name="model">oa9.session</field>
         <field name="arch" type="xml">
             <form>
                 <header>
@@ -91,8 +91,8 @@
     </record>
 
     <record id="session_view_pivot" model="ir.ui.view">
-        <field name="name">openacademy.session.pivot</field>
-        <field name="model">openacademy.session</field>
+        <field name="name">oa9.session.pivot</field>
+        <field name="model">oa9.session</field>
         <field name="arch" type="xml">
             <pivot string="Participations by Courses">
                 <field name="course_id"/>
@@ -103,7 +103,7 @@
 
     <record id="session_action" model="ir.actions.act_window">
         <field name="name">Sessions</field>
-        <field name="res_model">openacademy.session</field>
+        <field name="res_model">oa9.session</field>
         <field name="view_mode">tree,form,pivot</field>
     </record>
 </odoo>

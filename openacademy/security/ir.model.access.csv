@@ -1,8 +1,9 @@
 id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
-course_manager,Course Manager,model_openacademy_course,group_maesters,1,1,1,1
-session_manager,Session Manager,model_openacademy_session,group_maesters,1,1,1,1
-course_read_all,Course All,model_openacademy_course,group_apprentices,1,0,0,0
-session_read_all,Session All,model_openacademy_session,group_apprentices,1,0,0,0
-course_read_public,Course All,model_openacademy_course,,1,0,0,0
-session_read_public,Session All,model_openacademy_session,,1,0,0,0
+course_manager,Course Manager,model_oa9_course,group_maesters,1,1,1,1
+session_manager,Session Manager,model_oa9_session,group_maesters,1,1,1,1
+course_read_all,Course All,model_oa9_course,group_apprentices,1,0,0,0
+session_read_all,Session All,model_oa9_session,group_apprentices,1,0,0,0
+course_read_public,Course All,model_oa9_course,,1,0,0,0
+session_read_public,Session All,model_oa9_session,,1,0,0,0
 partner_read_public,Course All,model_res_partner,,1,0,0,0
+access_zzhelper,access_zzhelper,model_oa9_zzhelper,base.group_user,1,0,0,0

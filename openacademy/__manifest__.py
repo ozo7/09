@@ -33,7 +33,7 @@
         "wizard/add_attendee_views.xml",
         "data/openacademy_data.xml",
         "data/f_clean_instructors.xml",
-        "data/f_set_instructors.xml",
+        "data/f_set_instructors.xml",        
     ],
     # only loaded in demonstration mode
     'demo':        [],

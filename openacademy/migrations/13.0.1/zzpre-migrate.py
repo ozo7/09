@@ -3,6 +3,8 @@
 from odoo import api, fields, models, exceptions
 import logging
 
+# !!! Is not used
+
 _logger = logging.getLogger(__name__)
 
 def migrate(cr, version):

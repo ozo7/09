@@ -3,6 +3,7 @@
 from odoo import api, fields, models
 from random import randint
 
+# !!! Is not used
 
 def migrate(cr, version):
     try:

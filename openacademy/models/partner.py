@@ -9,7 +9,7 @@ class Partner(models.Model):
     _inherit = 'res.partner'
 
     instructor = fields.Boolean(default=False)
-    session_ids = fields.Many2many('openacademy.session', string="Attended Sessions", readonly=True)
+    session_ids = fields.Many2many('oa9.session', string="Attended Sessions", readonly=True)
 
     level = fields.Char(compute="_get_level", string="Level", store=True)
 
@@ -27,34 +27,4 @@ class Partner(models.Model):
             # Olaf changed
             partner.level = levelcast[max(level)] if level else 0
     
-    def clicking(self):        
-        # get 4 random partner and flag them as instructor
-        print("hello")
-        # p = self.env['res.partner']
-        # pp = p.search([])
-        # ppIDs = pp.ids # used to prevent double results in random
-        # ppSet = set()
-        # for i in range(1,4):
-        #     r = randint(1,len(ppIDs))
-        #     ppSet.add(ppIDs[r])
-        #     del ppIDs[r]
-        # for s in ppSet:
-        #     pp.browse(s).instructor = True
-        
-class Helper(models.Model):
-    _name = 'helper'
-
-    # Olaf: We need this urgently to make the method accessible from the xml, for example
-    @api.model
-    def clicking(self):        
-            # get 4 random partner and flag them as instructor
-            p = self.env['res.partner']
-            pp = p.search([])
-            ppIDs = pp.ids # used to prevent double results in random
-            ppSet = set()
-            for i in range(1,4):
-                r = randint(1,len(ppIDs))
-                ppSet.add(ppIDs[r])
-                del ppIDs[r]
-            for s in ppSet:
-                pp.browse(s).instructor = True
+      
