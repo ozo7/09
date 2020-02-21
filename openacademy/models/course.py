@@ -87,6 +87,7 @@ class Session(models.Model):
 
     name = fields.Char(required=True)
     description = fields.Html()
+    # Olaf: R1 - to archive the session
     active = fields.Boolean(default=True)
     state = fields.Selection([('draft', "Draft"), ('confirmed', "Confirmed"), ('done', "Done")], default='draft')
     level = fields.Selection(related='course_id.level', readonly=True)
@@ -98,8 +99,9 @@ class Session(models.Model):
     # Olaf: was not calculated, but editable and was corrected by inverse calculation of end_date. Now putting it to calculate and have a function prevents it from being editable! Now adding an inverse function makes it editable again and corrects it!
     duration = fields.Float(digits=(6, 2), help="Duration in days", default=1, compute='_calc_duration', inverse='_get_end_date')
 
+    # Olaf: the limitation to select only instructor flagged contacts has been implemented in the session view.
     instructor_id = fields.Many2one('res.partner', string="Instructor")
-    # Olaf: Here the ondelete attribute will fulfill the "clean system" requirement from the exercise.
+    # Olaf: Here the ondelete attribute will fulfill the "clean system" requirement in first exercise -R1-.
     course_id = fields.Many2one('oa9.course', ondelete='cascade', string="Course", required=True)
     attendee_ids = fields.Many2many('res.partner', string="Attendees", domain="[('is_company', '=', True)]")
     attendees_count = fields.Integer(compute='_get_attendees_count', store=True)
@@ -123,6 +125,7 @@ class Session(models.Model):
                 session.taken_seats = 0.0
             else:
                 session.taken_seats = 100.0 * len(session.attendee_ids) / session.seats
+            # Olaf: ?? here the confirmation of session if >50% - R6
 
     @api.depends('attendee_ids')
     def _get_attendees_count(self):
@@ -202,6 +205,7 @@ class Session(models.Model):
                 rec.action_confirm()
 
     # @api.multi
+    # Olaf: R6 - overwriting the write() method, interesting is that first the super is called and then the additions are made. In addition, the instructors are subscribed to the chatter feed.
     def write(self, vals):
         res = super(Session, self).write(vals)
         for rec in self:

@@ -26,15 +26,13 @@
     <record id="partner_view_form" model="ir.ui.view">
         <field name="name">openacadmey.partner.form</field>
         <field name="model">res.partner</field>
-        <!-- The form inherits from another! -->
+        <!-- Olaf: R5, the form inherits from another! -->
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml">
             <!-- Olaf: So the Academy content is just in the tab Sessions, it seems that I cannot put a session field outside of the tab (notebook) -->
             <notebook position="inside">
                 <page string="Sessions">
                     <group>
-                        <button type="object" class="oe_stat_button" string="testing" name="clicking"/>
-                        <field name="zzinfo" string="INFO ==&gt; " style="color:red;"/>
                         <field name="instructor"/>
                         <field name="level"/>
                         <field name="session_ids"/>
