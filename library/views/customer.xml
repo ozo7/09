@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-
         <record id="user_form" model="ir.ui.view">
             <field name="name">Users Form</field>
             <field name="model">res.partner</field>
@@ -18,7 +17,6 @@
                 </notebook>
             </field>
         </record>
-
         <record id="all_users_tree_view" model="ir.ui.view">
             <field name="name">All Customers List</field>
             <field name="model">res.partner</field>
@@ -32,14 +30,11 @@
                 </tree>
             </field>
         </record>
-
         <record model="ir.actions.act_window" id="all_users_action">
             <field name="name">All Customers Action</field>
             <field name="res_model">res.partner</field>
             <field name="view_mode">tree,form</field>
         </record>
-
         <menuitem id="all_users_menu" name="All Users List" action="all_users_action" parent="menu_customer_top" sequence="2" />
-
     </data>
 </odoo>

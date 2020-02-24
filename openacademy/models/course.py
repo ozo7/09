@@ -12,12 +12,16 @@ class Course(models.Model):
     name = fields.Char(string='Title', required=True)
     description = fields.Text()
 
-    responsible_id = fields.Many2one('res.users', ondelete='set null', string="Responsible")
-    can_edit_responsible = fields.Boolean(compute='_compute_can_edit_responsible')
+    responsible_id = fields.Many2one(
+        'res.users', ondelete='set null', string="Responsible")
+    can_edit_responsible = fields.Boolean(
+        compute='_compute_can_edit_responsible')
 
-    session_ids = fields.One2many('oa9.session', 'course_id', string="Sessions")
+    session_ids = fields.One2many(
+        'oa9.session', 'course_id', string="Sessions")
 
-    level = fields.Selection([('1', 'Easy'), ('2', 'Medium'), ('3', 'Hard')], string="Difficulty Level")
+    level = fields.Selection(
+        [('1', 'Easy'), ('2', 'Medium'), ('3', 'Hard')], string="Difficulty Level")
     session_count = fields.Integer(compute="_compute_session_count")
     attendee_count = fields.Integer(compute="_compute_attendee_count")
 
@@ -37,7 +41,8 @@ class Course(models.Model):
 
     @api.depends('responsible_id')
     def _compute_can_edit_responsible(self):
-        self.can_edit_responsible = self.env.user.has_group('oa9.group_archmaesters')
+        self.can_edit_responsible = self.env.user.has_group(
+            'oa9.group_archmaesters')
 
     # @api.multi
     def copy(self, default=None):
@@ -74,7 +79,8 @@ class Course(models.Model):
     @api.depends('session_ids.attendees_count')
     def _compute_attendee_count(self):
         for course in self:
-            course.attendee_count = len(course.mapped('session_ids.attendee_ids'))
+            course.attendee_count = len(
+                course.mapped('session_ids.attendee_ids'))
 
 
 class Session(models.Model):
@@ -89,22 +95,29 @@ class Session(models.Model):
     description = fields.Html()
     # Olaf: R1 - to archive the session
     active = fields.Boolean(default=True)
-    state = fields.Selection([('draft', "Draft"), ('confirmed', "Confirmed"), ('done', "Done")], default='draft')
+    state = fields.Selection(
+        [('draft', "Draft"), ('confirmed', "Confirmed"), ('done', "Done")], default='draft')
     level = fields.Selection(related='course_id.level', readonly=True)
-    responsible_id = fields.Many2one(related='course_id.responsible_id', readonly=True, store=True)
+    responsible_id = fields.Many2one(
+        related='course_id.responsible_id', readonly=True, store=True)
 
     start_date = fields.Date(default=fields.Date.context_today)
     # Olaf: is calculated, has inverse calculation
-    end_date = fields.Date(string='End date', default=fields.Date.context_today, store=True, compute='_get_end_date', inverse='_set_end_date', )
+    end_date = fields.Date(string='End date', default=fields.Date.context_today,
+                           store=True, compute='_get_end_date', inverse='_set_end_date', )
     # Olaf: was not calculated, but editable and was corrected by inverse calculation of end_date. Now putting it to calculate and have a function prevents it from being editable! Now adding an inverse function makes it editable again and corrects it!
-    duration = fields.Float(digits=(6, 2), help="Duration in days", default=1, compute='_calc_duration', inverse='_get_end_date')
+    duration = fields.Float(digits=(6, 2), help="Duration in days",
+                            default=1, compute='_calc_duration', inverse='_get_end_date')
 
     # Olaf: the limitation to select only instructor flagged contacts has been implemented in the session view.
     instructor_id = fields.Many2one('res.partner', string="Instructor")
     # Olaf: Here the ondelete attribute will fulfill the "clean system" requirement in first exercise -R1-.
-    course_id = fields.Many2one('oa9.course', ondelete='cascade', string="Course", required=True)
-    attendee_ids = fields.Many2many('res.partner', string="Attendees", domain="[('is_company', '=', True)]")
-    attendees_count = fields.Integer(compute='_get_attendees_count', store=True)
+    course_id = fields.Many2one(
+        'oa9.course', ondelete='cascade', string="Course", required=True)
+    attendee_ids = fields.Many2many(
+        'res.partner', string="Attendees", domain="[('is_company', '=', True)]")
+    attendees_count = fields.Integer(
+        compute='_get_attendees_count', store=True)
     seats = fields.Integer()
     taken_seats = fields.Float(compute='_compute_taken_seats', store=True)
     percentage_per_day = fields.Integer("%", default=100)
@@ -124,7 +137,8 @@ class Session(models.Model):
             if not session.seats:
                 session.taken_seats = 0.0
             else:
-                session.taken_seats = 100.0 * len(session.attendee_ids) / session.seats
+                session.taken_seats = 100.0 * \
+                    len(session.attendee_ids) / session.seats
             # Olaf: ?? here the confirmation of session if >50% - R6
 
     @api.depends('attendee_ids')
@@ -143,7 +157,8 @@ class Session(models.Model):
     def _check_instructor_not_in_attendees(self):
         for session in self:
             if session.instructor_id and session.instructor_id in session.attendee_ids:
-                raise exceptions.ValidationError("A session's instructor can't be an attendee")
+                raise exceptions.ValidationError(
+                    "A session's instructor can't be an attendee")
 
     @api.depends('start_date', 'duration')
     # Olaf: function configured in end_date field to be computed
@@ -160,8 +175,8 @@ class Session(models.Model):
                 session.end_date = str(start + duration)
 
     def _set_end_date(self):
-    # Olaf: function configured in end_date field to be inverse computed.
-    # Olaf: But what does it do? The duration is not the result of any manual change online of neither start nor end date! !! => Danger! The function is triggered by 'Save' and then the result is different from what the user saw!
+        # Olaf: function configured in end_date field to be inverse computed.
+        # Olaf: But what does it do? The duration is not the result of any manual change online of neither start nor end date! !! => Danger! The function is triggered by 'Save' and then the result is different from what the user saw!
         for session in self:
             if session.start_date and session.end_date:
                 # Compute the difference between dates, but: Friday - Monday = 4
@@ -172,7 +187,7 @@ class Session(models.Model):
 
     @api.depends('start_date', 'end_date')
     def _calc_duration(self):
-    # Olaf: Alternative to above function to make it work in the front end already. It is configured without making duration computed => does not have effect!
+        # Olaf: Alternative to above function to make it work in the front end already. It is configured without making duration computed => does not have effect!
         for session in self:
             if session.start_date and session.end_date:
                 # Compute the difference between dates, but: Friday - Monday = 4
@@ -185,19 +200,22 @@ class Session(models.Model):
     def action_draft(self):
         for rec in self:
             rec.state = 'draft'
-            rec.message_post(body="Session %s of the course %s reset to draft" % (rec.name, rec.course_id.name))
+            rec.message_post(body="Session %s of the course %s reset to draft" % (
+                rec.name, rec.course_id.name))
 
     # @api.multi
     def action_confirm(self):
         for rec in self:
             rec.state = 'confirmed'
-            rec.message_post(body="Session %s of the course %s confirmed" % (rec.name, rec.course_id.name))
+            rec.message_post(body="Session %s of the course %s confirmed" % (
+                rec.name, rec.course_id.name))
 
     # @api.multi
     def action_done(self):
         for rec in self:
             rec.state = 'done'
-            rec.message_post(body="Session %s of the course %s done" % (rec.name, rec.course_id.name))
+            rec.message_post(body="Session %s of the course %s done" %
+                             (rec.name, rec.course_id.name))
 
     def _auto_transition(self):
         for rec in self:
@@ -234,8 +252,9 @@ class Session(models.Model):
             })
 
         # install module accounting and a chart of account to have at least one expense account in your CoA
-        ### Olaf: You will find the 'invoices' as journal entries in the Accounting App: Menu: Accounting > Journal Entries
-        expense_account = self.env['account.account'].search([('user_type_id', '=', self.env.ref('account.data_account_type_expenses').id)], limit=1)
+        # Olaf: You will find the 'invoices' as journal entries in the Accounting App: Menu: Accounting > Journal Entries
+        expense_account = self.env['account.account'].search(
+            [('user_type_id', '=', self.env.ref('account.data_account_type_expenses').id)], limit=1)
         self.env['account.move.line'].create({
             'move_id': teacher_invoice.id,
             'product_id': self.product_id.id,

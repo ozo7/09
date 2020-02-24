@@ -28,7 +28,6 @@
             </form>
         </field>
     </record>
-
     <record id="library_copy_form_view" model="ir.ui.view">
         <field name="name">Book Copy form view</field>
         <field name="model">library.copy</field>
@@ -54,8 +53,7 @@
                 </div>
             </sheet>
             <field name="name" position="replace">
-                <field name="reference"/>
-            </field>
+                <field name="reference"/></field>
             <page name="copies" position="replace">
                 <page string="Rentals" name="rentals">
                     <field name="rental_ids" readonly="1">
@@ -69,7 +67,6 @@
             </page>
         </field>
     </record>
-
     <record id="library_book_tree_view_id" model="ir.ui.view">
         <field name="name">book.tree.view</field>
         <field name="model">product.product</field>
@@ -82,7 +79,6 @@
             </tree>
         </field>
     </record>
-
     <record id="library_copy_tree_view_id" model="ir.ui.view">
         <field name="name">copy.tree.view</field>
         <field name="model">library.copy</field>
@@ -93,7 +89,6 @@
             </tree>
         </field>
     </record>
-
     <record model="ir.actions.act_window" id="action_book">
         <field name="name">Books</field>
         <field name="res_model">product.product</field>
@@ -112,7 +107,6 @@
                     }),
                 ]"/>
     </record>
-
     <record model="ir.actions.act_window" id="action_copies">
         <field name="name">Book Copies</field>
         <field name="res_model">library.copy</field>
@@ -129,11 +123,8 @@
                     }),
                 ]"/>
     </record>
-
     <!-- actions -->
-
     <!-- <act_window id="launch_add_books_wizard" name="Add books" src_model="library.copy" res_model="library.wizard" view_mode="form" target="new" key2="client_action_multi"/> -->
-
     <record model="ir.ui.view" id="wizard_form_view">
         <field name="name">wizard.form</field>
         <field name="model">library.wizard</field>
@@ -147,13 +138,12 @@
                 <footer>
                     <button name="next_step" type="object" string="Continue" class="oe_highlight"/>
                         or
+                    
                     <button special="cancel" string="Cancel"/>
                 </footer>
             </form>
         </field>
     </record>
-
     <menuitem name="Books" id="menu_book" parent="menu_book_top" action="action_book"/>
     <menuitem name="Book Copies" id="menu_copies" parent="menu_book_top" action="action_copies"/>
-
 </odoo>

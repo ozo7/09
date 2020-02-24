@@ -7,10 +7,12 @@ class Books(models.Model):
 
     # Olaf: ?? book title as name inherited from product
     # Olaf: R3 - only author-defined partners
-    author_ids = fields.Many2many("res.partner", string="Authors", domain=[('author', '=', True)])
+    author_ids = fields.Many2many(
+        "res.partner", string="Authors", domain=[('author', '=', True)])
     edition_date = fields.Date()
     isbn = fields.Char(string='ISBN', unique=True)
-    publisher_id = fields.Many2one('res.partner', string='Publisher', domain=[('publisher', '=', True)])
+    publisher_id = fields.Many2one('res.partner', string='Publisher', domain=[
+                                   ('publisher', '=', True)])
     copy_ids = fields.One2many('library.copy', 'book_id', string="Book Copies")
     book = fields.Boolean(string='Is a Book', default=False)
 
@@ -21,12 +23,14 @@ class BookCopy(models.Model):
     # Olaf: R9 - display name needs to be configured, _res_name or name_get()
 
     # Olaf: Delegation - 'has-a-relationship'
-    book_id = fields.Many2one('product.product', string="Book", domain=[('book', "=", True)], required=True, ondelete="cascade", delegate=True)
+    book_id = fields.Many2one('product.product', string="Book", domain=[(
+        'book', "=", True)], required=True, ondelete="cascade", delegate=True)
     # Olaf: unique copy reference
     reference = fields.Char(required=True, string="Ref")
     # Olaf: the leases link here
     rental_ids = fields.One2many('library.rental', 'copy_id', string='Rentals')
-    book_state = fields.Selection([('available', 'Available'), ('rented', 'Rented'), ('lost', 'Lost')], default="available")
+    book_state = fields.Selection(
+        [('available', 'Available'), ('rented', 'Rented'), ('lost', 'Lost')], default="available")
     readers_count = fields.Integer(compute="_compute_readers_count")
 
     # @api.multi
@@ -59,7 +63,8 @@ class Wizard(models.TransientModel):
         res.update({'copy_ids': [(6, 0, self._context.get('active_ids', []))]})
         return res
 
-    copy_ids = fields.Many2many('library.copy', string="Book copies", required=True)
+    copy_ids = fields.Many2many(
+        'library.copy', string="Book copies", required=True)
     customer_id = fields.Many2one('res.partner', string="Customer")
     rental_ids = fields.Many2many('library.rental')
     return_date = fields.Date()
@@ -72,7 +77,8 @@ class Wizard(models.TransientModel):
     # @api.multi
     def next_step(self):
         for copy in self.copy_ids:
-            copy.rental_ids |= self.env['library.rental'].create({'copy_id': copy.id, 'customer_id': self.customer_id.id, 'return_date': self.return_date})
+            copy.rental_ids |= self.env['library.rental'].create(
+                {'copy_id': copy.id, 'customer_id': self.customer_id.id, 'return_date': self.return_date})
         return {
             'name':      'Rentals of %s' % (self.customer_id.name),
             'type':      'ir.actions.act_window',

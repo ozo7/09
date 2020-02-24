@@ -9,4 +9,5 @@ class Price(models.Model):
     name = fields.Char()
     duration = fields.Float('Duration in days')
     price = fields.Float()
-    type = fields.Selection([('time', 'Based on time'), ('one', 'Oneshot')], default="time")
+    type = fields.Selection(
+        [('time', 'Based on time'), ('one', 'Oneshot')], default="time")

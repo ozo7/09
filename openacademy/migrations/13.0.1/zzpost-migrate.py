@@ -5,6 +5,7 @@ from random import randint
 
 # !!! Is not used
 
+
 def migrate(cr, version):
     try:
         _logger.info('>>> migration start')
@@ -12,10 +13,10 @@ def migrate(cr, version):
         # get 4 random partner and flag them as instructor
         p = env['res.partner']
         pp = p.search([])
-        ppIDs = pp.ids # used to prevent double results in random
+        ppIDs = pp.ids  # used to prevent double results in random
         ppSet = set()
-        for i in range(1,4):
-            r = randint(1,len(ppIDs))
+        for i in range(1, 4):
+            r = randint(1, len(ppIDs))
             ppSet.add(ppIDs[r])
             del ppIDs[r]
         for s in ppSet:
@@ -24,5 +25,3 @@ def migrate(cr, version):
     except:
         # what kind of errors are available in exceptions. ?
         raise exceptions.UserError('!!! error in post-migrate.py'
-
-

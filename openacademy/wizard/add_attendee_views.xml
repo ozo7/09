@@ -13,12 +13,12 @@
                     <button name="subscribe" type="object"
                             string="Subscribe" class="oe_highlight"/>
                     or
+                    
                     <button special="cancel" string="Cancel"/>
                 </footer>
             </form>
         </field>
     </record>
-
     <record id="add_attendees_action" model="ir.actions.act_window">
         <field name="name">Add Attendees</field>
         <!-- <field name="src_model">res.partner</field> -->
@@ -27,7 +27,6 @@
         <field name="target">new</field>
         <!-- <field name="key2">client_action_multi</field> -->
     </record>
-
     <!-- Olaf: this part was causing the error additional element: record, xml schema not valid, and I tried to replace it by the record above. -->
     <!-- <act_window id="add_attendees_action"
                 name="Add Attendees"

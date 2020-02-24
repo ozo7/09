@@ -32,7 +32,6 @@
                 </form>
             </field>
         </record>
-
         <record id="author_view_tree_id" model="ir.ui.view">
             <field name="name">author.tree.view</field>
             <field name="model">res.partner</field>
@@ -44,7 +43,6 @@
                 </tree>
             </field>
         </record>
-
         <record model="ir.actions.act_window" id="action_author">
             <field name="name">Authors</field>
             <field name="res_model">res.partner</field>
@@ -63,10 +61,8 @@
                     }),
                 ]"/>
         </record>
-
         <!-- actions -->
         <menuitem name="Authors" id="menu_author" parent="menu_book_top"
                   action="action_author"/>
-
     </data>
 </odoo>

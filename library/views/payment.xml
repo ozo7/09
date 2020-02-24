@@ -12,14 +12,12 @@
                 </tree>
             </field>
         </record>
-
         <!-- actions -->
         <record model="ir.actions.act_window" id="action_payment">
             <field name="name">Payments</field>
             <field name="res_model">library.payment</field>
             <field name="view_mode">tree</field>
         </record>
-
         <menuitem name="Payments" id="menu_payment" parent="menu_rental_top"
                   action="action_payment"/>
     </data>

@@ -5,14 +5,12 @@
             name="Open Academy"
             web_icon="openacademy,static/description/icon.png"
     />
-
     <menuitem
             id="course_menu"
             name="Courses"
             parent="openacademy.root_menu"
             sequence="10"
     />
-
     <menuitem
             id="course_menu_action"
             name="Courses"
@@ -20,7 +18,6 @@
             sequence="10"
             action="course_action"
     />
-
     <menuitem
             id="session_menu_action"
             name="Sessions"
@@ -28,7 +25,6 @@
             sequence="20"
             action="session_action"
     />
-
     <menuitem
             id="configuration_menu"
             name="Configuration"
@@ -42,7 +38,6 @@
             sequence="10"
             action="partner_action"
     />
-
     <menuitem
             id="partner_category_menu_action"
             name="Contact Tags"
@@ -50,7 +45,6 @@
             sequence="20"
             action="partner_category_action"
     />
-
     <menuitem
             id="helper_menu"
             name="Helper"

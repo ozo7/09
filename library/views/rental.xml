@@ -24,7 +24,6 @@
                 </form>
             </field>
         </record>
-
         <record id="rental_view_tree_id" model="ir.ui.view">
             <field name="name">rental.tree.view</field>
             <field name="model">library.rental</field>
@@ -38,7 +37,6 @@
                 </tree>
             </field>
         </record>
-
         <!-- actions -->
         <record model="ir.actions.act_window" id="action_rental">
             <field name="name">Rentals</field>
@@ -46,7 +44,6 @@
             <field name="view_mode">tree,form</field>
             <field name="domain">[('state','in',['draft', 'rented'])]</field>
         </record>
-
         <menuitem name="Rentals" id="menu_rental" parent="menu_rental_top"
                   action="action_rental"/>
     </data>

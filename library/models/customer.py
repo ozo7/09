@@ -12,18 +12,25 @@ class Partner(models.Model):
     customer = fields.Boolean(default=False)
 
     # Olaf: the link / relation to the book leases:
-    current_rental_ids = fields.One2many('library.rental', 'customer_id', string='Current Rentals', domain=[('state', '=', 'rented')])
-    old_rental_ids = fields.One2many('library.rental', 'customer_id', string='Old Rentals', domain=[('state', '=', 'returned')])
-    lost_rental_ids = fields.One2many('library.rental', 'customer_id', string='Lost Rentals', domain=[('state', '=', 'lost')])
+    current_rental_ids = fields.One2many(
+        'library.rental', 'customer_id', string='Current Rentals', domain=[('state', '=', 'rented')])
+    old_rental_ids = fields.One2many(
+        'library.rental', 'customer_id', string='Old Rentals', domain=[('state', '=', 'returned')])
+    lost_rental_ids = fields.One2many(
+        'library.rental', 'customer_id', string='Lost Rentals', domain=[('state', '=', 'lost')])
 
-    book_ids = fields.Many2many("product.product", string="Books", domain=[('book', '=', True)])
+    book_ids = fields.Many2many(
+        "product.product", string="Books", domain=[('book', '=', True)])
     copy_ids = fields.Many2many("library.copy", string="Book Copies")
     nationality_id = fields.Many2one('res.country', 'Nationality')
     birthdate = fields.Date('Birthdate')
 
-    qty_lost_book = fields.Integer('Number of book copies lost', compute="_get_lost_books_qty")
-    payment_ids = fields.One2many('library.payment', 'customer_id', string='Payments')
-    amount_owed = fields.Float('Amount owed', compute="_amount_owed", store=True)
+    qty_lost_book = fields.Integer(
+        'Number of book copies lost', compute="_get_lost_books_qty")
+    payment_ids = fields.One2many(
+        'library.payment', 'customer_id', string='Payments')
+    amount_owed = fields.Float(
+        'Amount owed', compute="_amount_owed", store=True)
 
     # @api.multi
     def _get_lost_books_qty(self):
@@ -43,4 +50,5 @@ class Payment(models.Model):
 
     date = fields.Date(required=True, default=fields.Date.context_today)
     amount = fields.Float()
-    customer_id = fields.Many2one('res.partner', 'Customer', domain=[('customer', '=', True)])
+    customer_id = fields.Many2one('res.partner', 'Customer', domain=[
+                                  ('customer', '=', True)])

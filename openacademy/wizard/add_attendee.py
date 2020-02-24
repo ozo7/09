@@ -10,10 +10,12 @@ class AddAttendees(models.TransientModel):
     @api.model
     def default_get(self, fields):
         res = super(AddAttendees, self).default_get(fields)
-        res.update({'attendee_ids': [(6, 0, self._context.get('active_ids', []))]})
+        res.update(
+            {'attendee_ids': [(6, 0, self._context.get('active_ids', []))]})
         return res
 
-    session_id = fields.Many2one('oa9.session', string="Sessions", required=True)
+    session_id = fields.Many2one(
+        'oa9.session', string="Sessions", required=True)
     attendee_ids = fields.Many2many('res.partner', string="Attendees", )
 
     @api.model

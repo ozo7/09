@@ -5,11 +5,13 @@ from random import randint
 # Olaf
 levelcast = ('zero', 'easy', 'medium', 'hard')
 
+
 class Partner(models.Model):
     _inherit = 'res.partner'
 
     instructor = fields.Boolean(default=False)
-    session_ids = fields.Many2many('oa9.session', string="Attended Sessions", readonly=True)
+    session_ids = fields.Many2many(
+        'oa9.session', string="Attended Sessions", readonly=True)
 
     level = fields.Char(compute="_get_level", string="Level", store=True)
 
@@ -26,5 +28,3 @@ class Partner(models.Model):
                     level.append(int(categ.name.split(' ')[-1]))
             # Olaf changed
             partner.level = levelcast[max(level)] if level else 0
-
-

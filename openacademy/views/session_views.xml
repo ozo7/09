@@ -19,7 +19,6 @@
             </tree>
         </field>
     </record>
-
     <record id="session_view_form" model="ir.ui.view">
         <field name="name">oa9.session.form</field>
         <field name="model">oa9.session</field>
@@ -38,12 +37,10 @@
                             string="Mark as done" attrs="{'invisible' : [('state', 'in', ('draft', 'done'))] }"
                             class="oe_highlight"
                     />
-
                     <button name="create_invoice_teacher"
                             string="Invoice Teacher"
                             type="object"
                             attrs="{'invisible' : [('is_paid', '=', True)]}"/>
-
                     <field name="state" widget="statusbar" groups="openacademy.group_maesters"/>
                 </header>
                 <sheet>
@@ -86,7 +83,6 @@
             </form>
         </field>
     </record>
-
     <record id="session_view_pivot" model="ir.ui.view">
         <field name="name">oa9.session.pivot</field>
         <field name="model">oa9.session</field>
@@ -97,7 +93,6 @@
             </pivot>
         </field>
     </record>
-
     <record id="session_action" model="ir.actions.act_window">
         <field name="name">Sessions</field>
         <field name="res_model">oa9.session</field>

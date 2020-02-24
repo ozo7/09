@@ -11,7 +11,6 @@
             </tree>
         </field>
     </record>
-
     <record id="course_view_form" model="ir.ui.view">
         <field name="name">oa9.course.form</field>
         <field name="model">oa9.course</field>
@@ -70,7 +69,6 @@
             </form>
         </field>
     </record>
-
     <record id="course_view_search" model="ir.ui.view">
         <field name="name">oa9.course.search</field>
         <field name="model">oa9.course</field>
@@ -86,7 +84,6 @@
             </search>
         </field>
     </record>
-
     <record id="course_action" model="ir.actions.act_window">
         <field name="name">Courses</field>
         <field name="res_model">oa9.course</field>
