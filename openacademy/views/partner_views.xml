@@ -55,8 +55,8 @@
         </field>
     </record>
 
-<!-- These two below hold the id from the menu -->
-<!-- **** ACTION WINDOW -->
+<!-- **** STEP 2 START, THE MENU REDIRECTS HERE -->
+<!-- **** ACTION -->
     <record id="partner_action" model="ir.actions.act_window">
         <field name="name">Contacts</field>
         <field name="res_model">res.partner</field>
@@ -68,6 +68,8 @@
         <field name="res_model">res.partner.category</field>
         <field name="view_mode">tree,form</field>
     </record>
+<!-- **** STEP 2 END -->
+
 
 <!-- These two below reference the one id above about partner_action which relates to the menu "Contacts" -->
 <!-- **** ACTION WINDOW VIEW -->

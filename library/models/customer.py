@@ -5,11 +5,13 @@ from odoo import models, fields, api
 class Partner(models.Model):
     _inherit = 'res.partner'
 
-    author = fields.Boolean('is an Author', default=False)
-    publisher = fields.Boolean('is a Publisher', default=False)
+    # Olaf: Here the three types of users (in data) in the application:
+    author = fields.Boolean(default=False)
+    publisher = fields.Boolean(default=False)
     # Olaf: I added the below field to prevent the errors of this missing field!
-    customer = fields.Boolean('is a Customer', default=False)
+    customer = fields.Boolean(default=False)
 
+    # Olaf: the link / relation to the book leases:
     current_rental_ids = fields.One2many('library.rental', 'customer_id', string='Current Rentals', domain=[('state', '=', 'rented')])
     old_rental_ids = fields.One2many('library.rental', 'customer_id', string='Old Rentals', domain=[('state', '=', 'returned')])
     lost_rental_ids = fields.One2many('library.rental', 'customer_id', string='Lost Rentals', domain=[('state', '=', 'lost')])

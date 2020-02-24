@@ -39,6 +39,7 @@
                 <header>
                     <field name="book_state" widget="statusbar" nolabel="1" statusbar_visible="available,rented,lost"/>
                 </header>
+                <!-- Olaf: This button box does not do a good job in the layout of the page! -->
                 <div class="oe_button_box" name="buttons">
                     <button type="object" class="oe_stat_button" icon="fa-users" name="open_readers">
                         <div class="o_form_field o_stat_info">
@@ -50,7 +51,7 @@
                             </span>
                         </div>
                     </button>
-                </div>
+                </div>                
             </sheet>
             <field name="name" position="replace">
                 <field name="reference"/>

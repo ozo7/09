@@ -5,6 +5,8 @@ from odoo import models, fields, api
 class Books(models.Model):
     _inherit = 'product.product'
 
+    # Olaf: ?? book title as name inherited from product
+    # Olaf: R3 - only author-defined partners
     author_ids = fields.Many2many("res.partner", string="Authors", domain=[('author', '=', True)])
     edition_date = fields.Date()
     isbn = fields.Char(string='ISBN', unique=True)
@@ -16,9 +18,13 @@ class Books(models.Model):
 class BookCopy(models.Model):
     _name = 'library.copy'
     _description = 'Book Copy'
+    # Olaf: R9 - display name needs to be configured, _res_name or name_get()
 
+    # Olaf: Delegation - 'has-a-relationship'
     book_id = fields.Many2one('product.product', string="Book", domain=[('book', "=", True)], required=True, ondelete="cascade", delegate=True)
+    # Olaf: unique copy reference
     reference = fields.Char(required=True, string="Ref")
+    # Olaf: the leases link here
     rental_ids = fields.One2many('library.rental', 'copy_id', string='Rentals')
     book_state = fields.Selection([('available', 'Available'), ('rented', 'Rented'), ('lost', 'Lost')], default="available")
     readers_count = fields.Integer(compute="_compute_readers_count")
