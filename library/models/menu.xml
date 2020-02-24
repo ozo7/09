@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="helper_menu" name="Helper" parent="root_menu" sequence="101" />
+    <menuitem id="helper_menu_action" name="helper form" parent="helper_menu" sequence="10" action="helper_action" />
+</odoo>

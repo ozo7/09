@@ -19,7 +19,6 @@
             </field>
         </record>
 
-
         <record id="all_users_tree_view" model="ir.ui.view">
             <field name="name">All Customers List</field>
             <field name="model">res.partner</field>      
@@ -39,7 +38,6 @@
             <field name="res_model">res.partner</field>
             <field name="view_mode">tree,form</field>
         </record>
-
 
         <menuitem id="all_users_menu" name="All Users List" action="all_users_action" parent="menu_customer_top" sequence="2" />
 
