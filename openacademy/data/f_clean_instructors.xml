@@ -5,5 +5,5 @@
             <value eval="[('instructor', '=', True)]" />
         </function>
         <value eval="{'instructor': False}"/>
-    </function>    
+    </function>
 </odoo>

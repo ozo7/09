@@ -8,7 +8,7 @@
                    """,
 
     'description': """
-        Manage a cooperative group 
+        Manage a cooperative group
     """,
 
     'author':      "Odoo",

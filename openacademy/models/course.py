@@ -169,7 +169,7 @@ class Session(models.Model):
                 start_date = fields.Datetime.from_string(session.start_date)
                 end_date = fields.Datetime.from_string(session.end_date)
                 session.duration = (end_date - start_date).days + 1
-    
+
     @api.depends('start_date', 'end_date')
     def _calc_duration(self):
     # Olaf: Alternative to above function to make it work in the front end already. It is configured without making duration computed => does not have effect!

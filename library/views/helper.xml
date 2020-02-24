@@ -8,9 +8,9 @@
         <field name="arch" type="xml">
             <form edit="false" create="false" delete="false">
                 <sheet>
-                    <group>                        
+                    <group>
                         <button type="object" class="oe_stat_button" string="Randomize Roles" name="clearNflagRoles" context="{'ffroles' : ('author','publisher', 'customer') }"                        />
-                    </group>                   
+                    </group>
                 </sheet>
             </form>
         </field>

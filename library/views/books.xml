@@ -51,7 +51,7 @@
                             </span>
                         </div>
                     </button>
-                </div>                
+                </div>
             </sheet>
             <field name="name" position="replace">
                 <field name="reference"/>

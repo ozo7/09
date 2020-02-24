@@ -21,14 +21,14 @@
 
         <record id="all_users_tree_view" model="ir.ui.view">
             <field name="name">All Customers List</field>
-            <field name="model">res.partner</field>      
+            <field name="model">res.partner</field>
             <field name="arch" type="xml">
                 <tree string="Contacts">
                     <field name="display_name" string="Name"/>
                     <field name="author"/>
                     <field name="publisher"/>
                     <field name="customer"/>
-                    <field name="email"/>                
+                    <field name="email"/>
                 </tree>
             </field>
         </record>

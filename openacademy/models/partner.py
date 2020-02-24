@@ -14,7 +14,7 @@ class Partner(models.Model):
     level = fields.Char(compute="_get_level", string="Level", store=True)
 
     zzinfo = fields.Char(string="Info ===> ")
-    count = fields.Integer(default=0)    
+    count = fields.Integer(default=0)
 
     @api.depends('category_id', 'category_id.name')
     def _get_level(self):
@@ -26,5 +26,5 @@ class Partner(models.Model):
                     level.append(int(categ.name.split(' ')[-1]))
             # Olaf changed
             partner.level = levelcast[max(level)] if level else 0
-    
-      
+
+

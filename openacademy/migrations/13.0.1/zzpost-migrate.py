@@ -26,4 +26,3 @@ def migrate(cr, version):
         raise exceptions.UserError('!!! error in post-migrate.py'
 
 
-        

@@ -4,7 +4,7 @@
 <!-- **** VIEW FORM -->
     <record id="helper_view_form" model="ir.ui.view">
         <field name="name">openacadmey.helper.form</field>
-        <field name="model">oa9.zzhelper</field>        
+        <field name="model">oa9.zzhelper</field>
         <field name="arch" type="xml">
         <form edit="false" create="false" delete="false">
             <sheet>
@@ -14,9 +14,9 @@
                     <button type="object" class="oe_stat_button" string="flag 4 instructors" name="button_flag4randomInstructors"/>
                 </group>
                  <field name="zzinfo" string="INFO ==&gt; " style="color:blue;"/>
-        
+
             </sheet>
-        </form>    
+        </form>
         </field>
     </record>
 

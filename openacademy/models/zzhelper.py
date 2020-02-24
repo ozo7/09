@@ -29,7 +29,7 @@ class zzHelper(models.TransientModel):
     # Olaf: We need this @api.model urgently to make the method accessible from the xml, for example
     # Olaf: we can make the method private with a leading _ but then it cannot be called anymore from the button.
     @api.model
-    def flag4randomInstructors(self):               
+    def flag4randomInstructors(self):
             # get 4 random partner and flag them as instructor
             p = self.env['res.partner']
             pp = p.search([])

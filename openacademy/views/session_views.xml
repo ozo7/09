@@ -62,7 +62,7 @@
                             <!-- Olaf: The operators in the domain are html-encoded &gt; ... -->
                             <field name="instructor_id"
                                    domain="[('instructor', '=', True)]"
-                            />                        
+                            />
                             <field name="active"/>
                         </group>
                         <group>

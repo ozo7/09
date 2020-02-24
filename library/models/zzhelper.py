@@ -24,7 +24,7 @@ class zzHelper(models.TransientModel):
         return True
 
     @api.model
-    def flagRoles(self, roles):               
+    def flagRoles(self, roles):
         pp = self.getallPartners()
         for role in roles:
             ppIDs = pp.ids # used to prevent double results in random
@@ -36,19 +36,17 @@ class zzHelper(models.TransientModel):
             for s in ppSet:
                 partner = pp.browse(s)
                 setattr(partner, role, True)
-    
+
     # Olaf: why is the parameter set by integer 3?!
     # So we explicitly prioritize the ffroles from the frontend
     @api.model
     def clearNflagRoles(self, roles):
-        import pdb
-        pdb.set_trace()
         ffroles = self._context.get('ffroles', [])
         if ffroles:
-            roles = ffroles       
+            roles = ffroles
         self.clearRoles(roles)
         self.flagRoles(roles)
         return True
 
-        
+
 

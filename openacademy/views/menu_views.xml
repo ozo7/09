@@ -50,7 +50,7 @@
             sequence="20"
             action="partner_category_action"
     />
-    
+
     <menuitem
             id="helper_menu"
             name="Helper"

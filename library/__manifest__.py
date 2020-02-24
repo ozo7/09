@@ -37,7 +37,7 @@
         "data/mail.xml",
         "data/library_data.xml",
         "data/prices.xml",
-        "views/helper.xml",        
+        "views/helper.xml",
     ],
     # only loaded in demonstration mode
     'demo':        [],
