@@ -9,6 +9,7 @@ class Partner(models.Model):
     author = fields.Boolean(default=False)
     publisher = fields.Boolean(default=False)
     # Olaf: I added the below field to prevent the errors of this missing field!
+    # Xavier: this field was replaced in v13.0 by a ranking system
     customer = fields.Boolean(default=False)
 
     # Olaf: the link / relation to the book leases:

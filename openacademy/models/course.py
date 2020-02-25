@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from datetime import timedelta
-
-from odoo import api, exceptions, fields, models
+# Olaf: The import of the _ library will provide automatic translations to your user messages!
+from odoo import api, exceptions, fields, models, _
+import time
 
 
 class Course(models.Model):
@@ -93,10 +94,17 @@ class Session(models.Model):
 
     name = fields.Char(required=True)
     description = fields.Html()
-    # Olaf: R1 - to archive the session
-    active = fields.Boolean(default=True)
-    state = fields.Selection(
-        [('draft', "Draft"), ('confirmed', "Confirmed"), ('done', "Done")], default='draft')
+    ## Olaf: to have different session states
+    state = fields.Selection([
+        ('cancelled', "Cancelled"),
+        ('draft', "Draft"),
+        ('confirmed', "Confirmed"),
+        ('ongoing', "Ongoing"),
+        ('finishing', "Finishing"),
+        ('done', "Done"),
+        ], default='draft'
+        )
+    active = fields.Boolean(default=False, compute='_being_active', store=True)
     level = fields.Selection(related='course_id.level', readonly=True)
     responsible_id = fields.Many2one(
         related='course_id.responsible_id', readonly=True, store=True)
@@ -125,11 +133,17 @@ class Session(models.Model):
     is_paid = fields.Boolean('Is paid')
     product_id = fields.Many2one('product.template', 'Product')
 
+    # Olaf: The return of a warning in the frontend only works on onchange methods and where the values to check are in the frontend, too.
     def _warning(self, title, message):
         return {'warning': {
             'title':   title,
             'message': message,
         }}
+
+    @api.depends('state')
+    def _being_active(self):
+        for session in self:
+            session.active = session.state in ('confirmed', 'ongoing', 'finishing')
 
     @api.depends('seats', 'attendee_ids')
     def _compute_taken_seats(self):
@@ -157,8 +171,7 @@ class Session(models.Model):
     def _check_instructor_not_in_attendees(self):
         for session in self:
             if session.instructor_id and session.instructor_id in session.attendee_ids:
-                raise exceptions.ValidationError(
-                    "A session's instructor can't be an attendee")
+                raise exceptions.ValidationError(_("A session's instructor can't be an attendee"))
 
     @api.depends('start_date', 'duration')
     # Olaf: function configured in end_date field to be computed
@@ -196,38 +209,113 @@ class Session(models.Model):
                 end_date = fields.Datetime.from_string(session.end_date)
                 session.duration = (end_date - start_date).days + 1
 
-    # @api.multi
-    def action_draft(self):
+
+    # Olaf: I was trying to bundle the state change in one method but ran into problems about make it callable from the views by using the context and at the same time from the object (record) as well, needing a real parameter on the method. This could be done but would have ugly if tests and then, what if no parameter is given? Then there should be a raised exception but I did not find one appropriate. => Odoo tradition keeps the methods aligned to the actions in the frontend, so we keep it like this. # Olaf: so the below is not used.
+    def change_state(self, p_state2be):
         for rec in self:
-            rec.state = 'draft'
-            rec.message_post(body="Session %s of the course %s reset to draft" % (
-                rec.name, rec.course_id.name))
+            # Olaf: the below worked for getting the content of the attribute context from the view.
+            state2be = self._context['state2be']
+            if rec.state != state2be:
+                rec.state = state2be
+
+    @staticmethod
+    def check_confirmed_by_participation(rec_vals):
+        # a single record is passed and checked, self is not used and not present in a static method, it is only about the parameter by itself
+        if isinstance(rec_vals, dict):
+            if  {'state','taken_seats'} <= rec_vals.keys():
+                return rec_vals['state'] == 'confirmed' and rec_vals['taken_seats'] >= 50.0
+        else:
+            return rec_vals.taken_seats >= 50.0 and rec_vals.state == 'confirmed'
+        return False
+
+    # @api.multi
+    # @api.onchange('state') # Olaf: This is useless since the onchange is only valid for fields that can be changed in the frontend by direct user input. Since onchange is not working, returning a warning will not work either.
+    def action_draft(self):
+        # Olaf: Try to produce a warning
+        for rec in self:
+            if not self.check_confirmed_by_participation(rec):
+                if rec.state != 'draft':
+                    rec.state = 'draft'
+                    rec.message_post(body="state --&gt; draft")
+            else:
+                rec.message_post(body="state &lt;-- confirmed (attendees count overrides)")
 
     # @api.multi
     def action_confirm(self):
         for rec in self:
-            rec.state = 'confirmed'
-            rec.message_post(body="Session %s of the course %s confirmed" % (
-                rec.name, rec.course_id.name))
+            if rec.state != 'confirmed':
+                rec.state = 'confirmed'
+                rec.message_post(body="state --&gt; confirmed")
 
     # @api.multi
     def action_done(self):
         for rec in self:
-            rec.state = 'done'
-            rec.message_post(body="Session %s of the course %s done" %
-                             (rec.name, rec.course_id.name))
+            if rec.state != 'done':
+                rec.state = 'done'
+                rec.message_post(body="state --&gt; done")
 
-    def _auto_transition(self):
+    def action_cancelled(self):
         for rec in self:
-            if rec.taken_seats >= 50.0 and rec.state == 'draft':
-                rec.action_confirm()
+            if rec.state != 'cancelled':
+                rec.state = 'cancelled'
+                rec.message_post(body="state --&gt; !cancelled!")
+
+    def action_ongoing(self):
+        for rec in self:
+            if rec.state != 'ongoing':
+                rec.state = 'ongoing'
+                rec.message_post(body="state --&gt; ongoing")
+
+    def action_finishing(self):
+        for rec in self:
+            if rec.state != 'finishing':
+                rec.state = 'finishing'
+                rec.message_post(body="state --&gt; finishing")
+
+
+    # Olaf: Is it not better to put this in an onchange function?
+    # => no, because onchange is only in frontend, user input based and thus not sufficient!
+    # def _auto_transition(self):
+    #     recSet = set()
+    #     for rec in self:
+    #         if rec.taken_seats >= 50.0 and rec.state == 'draft':
+    #             recSet.add(rec)
+    #             rec.action_confirm()
+    #             rec.message_post(body= "len " + str(len(recSet)) + " -- " + str(time.time()) + "Session %s of the course %s:<br> --> automatically set to confirmed (sufficient attendees are inscribed)" % (rec.name, rec.course_id.name))
+    #     if recSet:
+    #         title = "The following session has been reset to confirmed: <br>"
+    #         message = ""
+    #         for rec in recSet:
+    #             message = message + "<br>" + str(rec.id) + " -- " + str(time.time())
+    #         return self._warning(title, message)
+
+    # def auto_confirm_state(self):
+    #     return self._warning("TESTING", "does the warning work at all?")
+    #     recSet = set()
+    #     for rec in self:
+    #         if rec.taken_seats >= 50.0 and rec.state == 'draft':
+    #             recSet.add(rec)
+    #             rec.action_confirm()
+    #             rec.message_post(body= "len " + str(len(recSet)) + " -- " + str(time.time()) + "Session %s of the course %s:<br> --> automatically set to confirmed (sufficient attendees are inscribed)" % (rec.name, rec.course_id.name))
+    #     if recSet:
+    #         title = "The following session has been reset to confirmed: <br>"
+    #         message = ""
+    #         for rec in recSet:
+    #             message = message + "<br>" + str(rec.id) + " -- " + str(time.time())
+    #         return self._warning(title, message)
+
 
     # @api.multi
     # Olaf: R6 - overwriting the write() method, interesting is that first the super is called and then the additions are made. In addition, the instructors are subscribed to the chatter feed.
     def write(self, vals):
+        # Olaf: We should check the vals before handing them to the super method. Because, for example, if you change the participation of the course to >= 50 % and change then change the state to 'draft' by the action button, then the check in the action button comes before the participation is saved. If there is any override of user entries by the backend checks, this should at least be logged in the chatter.
+        # TODO: What if self is a recordset? => we extend the static check function
+        if check_confirmed_by_participation(vals):
+            vals['state'] = 'confirmed'
+            rec.message_post(body="state &lt;-- confirmed (attendees count overrides)")
         res = super(Session, self).write(vals)
-        for rec in self:
-            rec._auto_transition()
+        #for rec in self:
+        #    rec._auto_transition()
         if vals.get('instructor_id'):
             self.message_subscribe([vals['instructor_id']])
         return res

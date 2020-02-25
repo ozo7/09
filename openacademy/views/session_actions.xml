@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!-- Olaf: unfinished action but visible in the model's action drop down list (when selecting elements in list view) -->
+    <record id="action_testing" model="ir.actions.act_window">
+        <field name="name">Testing</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">oa9.session</field>
+        <field name="binding_model_id" ref="openacademy.model_oa9_session"/>
+    </record>
+</odoo>

@@ -42,6 +42,8 @@ class zzHelper(models.TransientModel):
     # So we explicitly prioritize the ffroles from the frontend
     @api.model
     def clear_flag_roles(self, roles):
+        import pdb
+        pdb.set_trace()
         ffroles = self._context.get('ffroles', [])
         if ffroles:
             roles = ffroles
