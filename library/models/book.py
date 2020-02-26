@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
+import re
 
 
 class Books(models.Model):
@@ -20,6 +21,7 @@ class Books(models.Model):
 class BookCopy(models.Model):
     _name = 'library.copy'
     _description = 'Book Copy'
+    # _rec_name is difficult to use for clean name, using name_get()
     # Olaf: R9 - display name needs to be configured, _res_name or name_get()
 
     # Olaf: Delegation - 'has-a-relationship'
@@ -32,6 +34,9 @@ class BookCopy(models.Model):
     book_state = fields.Selection(
         [('available', 'Available'), ('rented', 'Rented'), ('lost', 'Lost')], default="available")
     readers_count = fields.Integer(compute="_compute_readers_count")
+
+    def clean_string_display(self):
+        return "something"
 
     # @api.multi
     def open_readers(self):
@@ -51,6 +56,17 @@ class BookCopy(models.Model):
     def _compute_readers_count(self):
         for book in self:
             book.readers_count = len(book.mapped('rental_ids'))
+
+    # Olaf: using name function to create a display name that Odoo accepts
+    def name_get(self):
+        response = []
+        for rec in self:
+            unclean_name = rec.book_id.name + " -- " + rec.reference
+            clean_name = re.sub('[^a-zA-Z0-9 \.-]+', '_',unclean_name)
+            clean_name = re.sub(' +', '-', clean_name)
+            clean_name = re.sub('--+', '--', clean_name)
+            response.append([rec.id, clean_name])
+        return response
 
 
 class Wizard(models.TransientModel):
