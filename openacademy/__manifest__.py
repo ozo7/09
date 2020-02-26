@@ -36,6 +36,7 @@
         "data/f_clean_instructors.xml",
         "data/f_set_instructors.xml",
         "views/session_actions.xml",
+        "actions/cron_session_state.xml",
     ],
     # only loaded in demonstration mode
     'demo':        [],
