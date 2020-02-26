@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api
+from datetime import datetime
+from datetime import timedelta
 
 
 class Rentals(models.Model):
@@ -14,7 +16,7 @@ class Rentals(models.Model):
     book_id = fields.Many2one('product.product', string='Book', domain=[
                               ('book', '=', True)], related='copy_id.book_id', readonly=True)
     rental_date = fields.Date(default=fields.Date.context_today, required=True)
-    return_date = fields.Date(required=True)
+    return_date = fields.Date(default=datetime.now().date() + timedelta(days=22), required=True)
     # Olaf: history of rentals will be provided
     state = fields.Selection([('draft', 'Draft'), ('rented', 'Rented'),
                               ('returned', 'Returned'), ('lost', 'Lost')], default="draft")
