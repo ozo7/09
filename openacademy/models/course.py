@@ -218,27 +218,17 @@ class Session(models.Model):
             if rec.state != state2be:
                 rec.state = state2be
 
-    @staticmethod
-    def check_confirmed_by_participation(rec_vals):
-        # a single record is passed and checked, self is not used and not present in a static method, it is only about the parameter by itself
-        if isinstance(rec_vals, dict):
-            if  {'state','taken_seats'} <= rec_vals.keys():
-                return rec_vals['state'] == 'confirmed' and rec_vals['taken_seats'] >= 50.0
-        else:
-            return rec_vals.taken_seats >= 50.0 and rec_vals.state == 'confirmed'
-        return False
-
     # @api.multi
     # @api.onchange('state') # Olaf: This is useless since the onchange is only valid for fields that can be changed in the frontend by direct user input. Since onchange is not working, returning a warning will not work either.
     def action_draft(self):
         # Olaf: Try to produce a warning
         for rec in self:
-            if not self.check_confirmed_by_participation(rec):
+            if not getattr(rec, 'taken_seats') or rec.taken_seats < 50.0:
                 if rec.state != 'draft':
                     rec.state = 'draft'
                     rec.message_post(body="state --&gt; draft")
             else:
-                rec.message_post(body="state &lt;-- confirmed (attendees count overrides)")
+                rec.message_post(body="state &lt;-- cannot be put in draft mode (attendees count overrides)")
 
     # @api.multi
     def action_confirm(self):
@@ -272,52 +262,19 @@ class Session(models.Model):
                 rec.state = 'finishing'
                 rec.message_post(body="state --&gt; finishing")
 
-
-    # Olaf: Is it not better to put this in an onchange function?
-    # => no, because onchange is only in frontend, user input based and thus not sufficient!
-    # def _auto_transition(self):
-    #     recSet = set()
-    #     for rec in self:
-    #         if rec.taken_seats >= 50.0 and rec.state == 'draft':
-    #             recSet.add(rec)
-    #             rec.action_confirm()
-    #             rec.message_post(body= "len " + str(len(recSet)) + " -- " + str(time.time()) + "Session %s of the course %s:<br> --> automatically set to confirmed (sufficient attendees are inscribed)" % (rec.name, rec.course_id.name))
-    #     if recSet:
-    #         title = "The following session has been reset to confirmed: <br>"
-    #         message = ""
-    #         for rec in recSet:
-    #             message = message + "<br>" + str(rec.id) + " -- " + str(time.time())
-    #         return self._warning(title, message)
-
-    # def auto_confirm_state(self):
-    #     return self._warning("TESTING", "does the warning work at all?")
-    #     recSet = set()
-    #     for rec in self:
-    #         if rec.taken_seats >= 50.0 and rec.state == 'draft':
-    #             recSet.add(rec)
-    #             rec.action_confirm()
-    #             rec.message_post(body= "len " + str(len(recSet)) + " -- " + str(time.time()) + "Session %s of the course %s:<br> --> automatically set to confirmed (sufficient attendees are inscribed)" % (rec.name, rec.course_id.name))
-    #     if recSet:
-    #         title = "The following session has been reset to confirmed: <br>"
-    #         message = ""
-    #         for rec in recSet:
-    #             message = message + "<br>" + str(rec.id) + " -- " + str(time.time())
-    #         return self._warning(title, message)
-
-
     # @api.multi
     # Olaf: R6 - overwriting the write() method, interesting is that first the super is called and then the additions are made. In addition, the instructors are subscribed to the chatter feed.
     def write(self, vals):
-        # Olaf: We should check the vals before handing them to the super method. Because, for example, if you change the participation of the course to >= 50 % and change then change the state to 'draft' by the action button, then the check in the action button comes before the participation is saved. If there is any override of user entries by the backend checks, this should at least be logged in the chatter.
-        # TODO: What if self is a recordset? => we extend the static check function
-        if check_confirmed_by_participation(vals):
-            vals['state'] = 'confirmed'
-            rec.message_post(body="state &lt;-- confirmed (attendees count overrides)")
+        # Olaf: !! It is better to have the changes first written to the record calling super() and then check for consistency and override values like the participation check. This is because the vals do not contain the whole record, just the changed value from the frontend.
         res = super(Session, self).write(vals)
-        #for rec in self:
-        #    rec._auto_transition()
+        self.ensure_one()
+        if getattr(self, 'taken_seats') and getattr(self, 'state'):
+            if self.taken_seats >= 50.0 and self.state == 'draft':
+                self.state = 'confirmed'
+                self.message_post(body="state &lt;-- confirmed (attendees count overrides)")
         if vals.get('instructor_id'):
             self.message_subscribe([vals['instructor_id']])
+            # Olaf: What if an older instructor was overwritten with by a new one, currently he remains subscribed. RE -- test.
         return res
 
     @api.model
