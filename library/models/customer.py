@@ -4,6 +4,7 @@ from odoo import models, fields, api
 
 class Partner(models.Model):
     _inherit = 'res.partner'
+    # Olaf: fields will be put into the original res.partner table!
 
     # Olaf: Here the three types of users (in data) in the application:
     author = fields.Boolean(default=False)

@@ -282,8 +282,8 @@ class Session(models.Model):
     def _cron_state(self):
         sessions = self.search([('state', '!=', 'done')])
         # Olaf: The cron action does not get all records of the defined model, instead, it has to collect the records by itself
-        #for rec in self: <= invalid, there are
-        # NO records handed to the cron action automatically.
+        # for rec in self: <= invalid, there are
+        # no records handed to the cron action automatically.
         for rec in sessions:
             if getattr(rec, 'state') and not rec.state in ('finishing', 'done'):
                 # day difference (diff) seen from checked date (start or end of session): +1 is tomorrow, -1 is yesterday
@@ -294,11 +294,10 @@ class Session(models.Model):
                 delta_days_start = (rec.start_date - today).days
                 delta_days_end = (rec.end_date - today).days
                 if delta_days_start <= 0 and delta_days_end >= 1:
-                    if rec.state not in ('ongoing', 'done'):
+                    if rec.state not in ('ongoing'):
                         rec.state = 'ongoing'
                 if delta_days_end <= 0 and delta_days_end >= -1:
-                    if rec.state not in ('finishing', 'done'):
-                        rec.state = 'finishing'
+                    rec.state = 'finishing'
                 # let us assume it will only be set to 'done' after manually checking that all the data was entered to really finalize the session.
 
 

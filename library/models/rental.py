@@ -60,6 +60,7 @@ class Rentals(models.Model):
             rec.copy_id.active = False
             rec.add_fee('loss')
 
+    # Olaf: this is the code referenced in the cron action
     @api.model
     def _cron_check_date(self):
         late_rentals = self.search(

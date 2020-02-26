@@ -53,7 +53,9 @@
                 </div>
             </sheet>
             <field name="name" position="replace">
-                <field name="reference"/></field>
+                <field name="book_id"/>
+                <field name="reference"/>
+            </field>
             <page name="copies" position="replace">
                 <page string="Rentals" name="rentals">
                     <field name="rental_ids" readonly="1">
@@ -95,36 +97,12 @@
         <field name="view_mode">tree,form</field>
         <field name="domain">[('book', '=', True)]</field>
         <field name="context">{'default_book': True}</field>
-        <field name="view_ids" eval="[
-                (5, 0, 0),
-                (0, 0, {
-                    'view_mode': 'tree',
-                    'view_id': ref('library.library_book_tree_view_id'),
-                    }),
-                (0, 0, {
-                    'view_mode': 'form',
-                    'view_id': ref('library.library_book_form_view'),
-                    }),
-                ]"/>
     </record>
     <record model="ir.actions.act_window" id="action_copies">
         <field name="name">Book Copies</field>
         <field name="res_model">library.copy</field>
         <field name="view_mode">tree,form</field>
-        <field name="view_ids" eval="[
-                (5, 0, 0),
-                (0, 0, {
-                    'view_mode': 'tree',
-                    'view_id': ref('library.library_copy_tree_view_id'),
-                    }),
-                (0, 0, {
-                    'view_mode': 'form',
-                    'view_id': ref('library.library_copy_form_view'),
-                    }),
-                ]"/>
     </record>
-    <!-- actions -->
-    <!-- <act_window id="launch_add_books_wizard" name="Add books" src_model="library.copy" res_model="library.wizard" view_mode="form" target="new" key2="client_action_multi"/> -->
     <record model="ir.ui.view" id="wizard_form_view">
         <field name="name">wizard.form</field>
         <field name="model">library.wizard</field>
@@ -138,6 +116,7 @@
                 <footer>
                     <button name="next_step" type="object" string="Continue" class="oe_highlight"/>
                         or
+                    
                     
                     <button special="cancel" string="Cancel"/>
                 </footer>
