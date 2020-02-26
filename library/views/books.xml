@@ -62,7 +62,7 @@
                         <tree>
                             <field name="customer_id"/>
                             <field name="rental_date"/>
-                            <field name="return_date"/>
+                            <field name="return_date_planned"/>
                         </tree>
                     </field>
                 </page>
@@ -111,7 +111,7 @@
                 <group>
                     <field name="copy_ids" invisible="1"/>
                     <field name="customer_id"/>
-                    <field name="return_date" required="True"/>
+                    <field name="return_date_planned" required="True"/>
                 </group>
                 <footer>
                     <button name="next_step" type="object" string="Continue" class="oe_highlight"/>

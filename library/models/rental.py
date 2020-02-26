@@ -7,7 +7,7 @@ from datetime import timedelta
 class Rentals(models.Model):
     _name = 'library.rental'
     _description = 'Book rental'
-    _order = "rental_date desc,return_date desc"
+    _order = "rental_date desc,return_date_planned desc"
 
     customer_id = fields.Many2one('res.partner', string='Customer', domain=[
                                   ('customer', '=', True)], required=True)
@@ -16,10 +16,17 @@ class Rentals(models.Model):
     book_id = fields.Many2one('product.product', string='Book', domain=[
                               ('book', '=', True)], related='copy_id.book_id', readonly=True)
     rental_date = fields.Date(default=fields.Date.context_today, required=True)
-    return_date = fields.Date(default=datetime.now().date() + timedelta(days=22), required=True)
+    return_date_planned = fields.Date(default=datetime.now().date() + timedelta(days=22), required=True, string="Planned Return Date")
+    return_date_actual = fields.Date(string="Actual Return Date")
+
     # Olaf: history of rentals will be provided
-    state = fields.Selection([('draft', 'Draft'), ('rented', 'Rented'),
-                              ('returned', 'Returned'), ('lost', 'Lost')], default="draft")
+    state = fields.Selection([
+        ('draft', 'Draft'),
+        ('rented', 'Rented'),
+        ('returned', 'Returned'),
+        ('overdue', 'Overdue'),
+        ('lost', 'Lost'),
+        ], default="draft")
 
     # @api.multi
     def action_confirm(self):
@@ -34,7 +41,7 @@ class Rentals(models.Model):
             if type == 'time':
                 price_id = self.env.ref('library.price_rent')
                 delta_dates = fields.Date.from_string(
-                    rec.return_date) - fields.Date.from_string(rec.rental_date)
+                    rec.return_date_planned) - fields.Date.from_string(rec.rental_date)
                 amount = delta_dates.days * price_id.price / price_id.duration
             elif type == 'loss':
                 price_id = self.env.ref('library.price_loss')
@@ -65,8 +72,13 @@ class Rentals(models.Model):
     # Olaf: this is the code referenced in the cron action
     @api.model
     def _cron_check_date(self):
-        late_rentals = self.search(
-            [('state', '=', 'rented'), ('return_date', '<', fields.Date.today())])
+        late_rentals = self.search([
+            ('state', '=', 'rented'),
+            ('return_date_planned', '<', fields.Date.today())
+            ])
+        # Olaf: Mark the late leases as overdue:
+        # Mark overdue and produce reminder email
         template_id = self.env.ref('library.mail_template_book_return')
-        for rec in late_rentals:
-            mail_id = template_id.send_mail(rec.id)
+        for latie in late_rentals:
+            latie.state = 'overdue'
+            mail_id = template_id.send_mail(latie.id)

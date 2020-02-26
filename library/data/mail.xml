@@ -10,7 +10,7 @@
         <field name="body_html">
             <![CDATA[
           <div >
-              ${object.customer_id.name},<br/><p>You were supposed to bring back the book ${object.book_id.name} on the ${object.return_date}.</p></div>
+              ${object.customer_id.name},<br/><p>You were supposed to bring back the book ${object.book_id.name} on the ${object.return_date_planned}.</p></div>
                 ]]>
         </field>
     </record>

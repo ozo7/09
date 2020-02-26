@@ -83,7 +83,7 @@ class Wizard(models.TransientModel):
         'library.copy', string="Book copies", required=True)
     customer_id = fields.Many2one('res.partner', string="Customer")
     rental_ids = fields.Many2many('library.rental')
-    return_date = fields.Date()
+    return_date_planned = fields.Date()
 
     @api.model
     def create(self, vals):
@@ -94,7 +94,7 @@ class Wizard(models.TransientModel):
     def next_step(self):
         for copy in self.copy_ids:
             copy.rental_ids |= self.env['library.rental'].create(
-                {'copy_id': copy.id, 'customer_id': self.customer_id.id, 'return_date': self.return_date})
+                {'copy_id': copy.id, 'customer_id': self.customer_id.id, 'return_date_planned': self.return_date_planned})
         return {
             'name':      'Rentals of %s' % (self.customer_id.name),
             'type':      'ir.actions.act_window',
