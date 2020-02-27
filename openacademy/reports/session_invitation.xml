@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Olaf: does not show print_report_name -->
+    <!-- This is the report action, shortcut by the tag <report/> -->
+    <report
+        id="action_report_session_invitation"
+        string="Invitation for incoming course"
+        model="oa9.session"
+        report_type="qweb-pdf"
+        file="openacademy.file_invitation_session"
+        name="openacademy.template_invitation_session"
+        print_report_name="'Invitation - %s' % (object.name)"
+    />
+    <!-- template which calls web.external_layout that adds a standard header -->
+    <template id="template_invitation_session">
+        <t t-call="web.html_container">
+            <t t-foreach="docs[:1]" t-as="doc">
+                <t t-foreach="doc.attendee_ids" t-as="attendee">
+                    <t t-call="web.external_layout">
+                        <div class="page" style="text-align:center;">
+
+                            <h2 t-field="doc.course_id.name"/>
+                            <p> You are registered for this course. Please bring this invitation to the first class. The duration of the session is:
+                            </p>
+                            <h3 t-field="doc.name"/>
+                            <p>From
+                                <span t-field="doc.start_date"/> to
+                                <span t-field="doc.end_date"/>
+                            </p>
+                            <hr/>
+                            <section style="display:flex;justify-content:space-around;">
+                            <div>
+                            <p>This invitation is for:</p>
+                            <h3><span t-field="attendee.name"/></h3>
+                            <h3><span t-field="attendee.street"/></h3>
+                            <h3><span t-field="attendee.zip"/></h3>
+                            <h3><span t-field="attendee.city"/></h3>
+                            <h3><span t-field="attendee.country_id.name"/></h3>
+                            </div>
+                            <div>
+                            <p>Please present this barcode:</p>
+                            <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', attendee.name + '~' + attendee.zip, 600, 100)" style="width:350px;height:60px"/>
+                            </div>
+                            </section>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
