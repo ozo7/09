@@ -11,36 +11,61 @@
         name="openacademy.template_invitation_session"
         print_report_name="'Invitation - %s' % (object.name)"
     />
+
+    <template primary="True" id="external_layout_standard_replacing" inherit_id="web.external_layout_standard">
+        <xpath expr="//div[@name='company_address']" position="replace">
+            <span style="color:red;">--replaced--</span>
+        </xpath>
+    </template>
+
+
+    <template primary="True" id="external_layout_standard_replacing2" inherit_id="web.external_layout">
+        <xpath expr="//t[@t-call='web.external_layout_standard']" position="replace">
+         <t t-else="else" t-call="openacademy.external_layout_standard_replacing"><t t-raw="0"/></t>
+        </xpath>
+    </template>
+
     <!-- template which calls web.external_layout that adds a standard header -->
     <template id="template_invitation_session">
         <t t-call="web.html_container">
             <t t-foreach="docs[:1]" t-as="doc">
                 <t t-foreach="doc.attendee_ids" t-as="attendee">
-                    <t t-call="web.external_layout">
+                    <t t-call="openacademy.external_layout_standard_replacing2">
                         <div class="page" style="text-align:center;">
-
                             <h2 t-field="doc.course_id.name"/>
                             <p> You are registered for this course. Please bring this invitation to the first class. The duration of the session is:
                             </p>
                             <h3 t-field="doc.name"/>
                             <p>From
+                                
                                 <span t-field="doc.start_date"/> to
+                                
                                 <span t-field="doc.end_date"/>
                             </p>
                             <hr/>
                             <section style="display:flex;justify-content:space-around;">
-                            <div>
-                            <p>This invitation is for:</p>
-                            <h3><span t-field="attendee.name"/></h3>
-                            <h3><span t-field="attendee.street"/></h3>
-                            <h3><span t-field="attendee.zip"/></h3>
-                            <h3><span t-field="attendee.city"/></h3>
-                            <h3><span t-field="attendee.country_id.name"/></h3>
-                            </div>
-                            <div>
-                            <p>Please present this barcode:</p>
-                            <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', attendee.name + '~' + attendee.zip, 600, 100)" style="width:350px;height:60px"/>
-                            </div>
+                                <div>
+                                    <p>This invitation is for:</p>
+                                    <h3>
+                                        <span t-field="attendee.name"/>
+                                    </h3>
+                                    <h3>
+                                        <span t-field="attendee.street"/>
+                                    </h3>
+                                    <h3>
+                                        <span t-field="attendee.zip"/>
+                                    </h3>
+                                    <h3>
+                                        <span t-field="attendee.city"/>
+                                    </h3>
+                                    <h3>
+                                        <span t-field="attendee.country_id.name"/>
+                                    </h3>
+                                </div>
+                                <div>
+                                    <p>Please present this barcode:</p>
+                                    <img t-att-src="'/report/barcode/?type=%s&amp;value=%s&amp;width=%s&amp;height=%s' % ('Code128', attendee.name + '~' + attendee.zip, 600, 100)" style="width:350px;height:60px"/>
+                                </div>
                             </section>
                         </div>
                     </t>
