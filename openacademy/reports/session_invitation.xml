@@ -31,15 +31,23 @@
             <t t-foreach="docs[:1]" t-as="doc">
                 <t t-foreach="doc.attendee_ids" t-as="attendee">
                     <t t-call="openacademy.external_layout_standard_replacing2">
+                        <div style="text-align:right;font-family:sansserif;font-size:12;color:blue">
+                       <span t-field="attendee.name"/><br/>
+                       <span t-field="attendee.street"/><br/>
+                       <span t-field="attendee.zip"/>
+                       <!-- ampersand needs to be encoded -->
+                       <!-- but there is a whitespace anyways -->
+                       &amp;nbsp;
+                       <span t-field="attendee.city"/><br/>
+                       <span t-field="attendee.country_id.name"/><br/>
+                        </div>
                         <div class="page" style="text-align:center;">
                             <h2 t-field="doc.course_id.name"/>
                             <p> You are registered for this course. Please bring this invitation to the first class. The duration of the session is:
                             </p>
                             <h3 t-field="doc.name"/>
                             <p>From
-                                
                                 <span t-field="doc.start_date"/> to
-                                
                                 <span t-field="doc.end_date"/>
                             </p>
                             <hr/>
