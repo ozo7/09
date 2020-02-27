@@ -3,7 +3,7 @@ from odoo import models, fields, api
 from datetime import datetime
 from datetime import timedelta
 
-
+# Olaf: The fee logic is implemented on the button actions. When clicked, producing as a result a library.payment object per customer and click.
 class Rentals(models.Model):
     _name = 'library.rental'
     _description = 'Book rental'
